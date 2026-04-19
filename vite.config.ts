@@ -15,7 +15,7 @@ export default defineConfig({
   plugins: [
     tanstackStart({
       server: {
-        preset: 'node-server',
+        preset: process.env.VERCEL ? 'vercel' : 'node-server',
       },
     }),
     viteReact(),
