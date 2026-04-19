@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
-import { resolve } from 'node:path'
+import { fileURLToPath, URL } from 'node:url'
 import { nitro } from 'nitro/vite'
 
 export default defineConfig({
@@ -10,7 +10,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '~': resolve(__dirname, './src'),
+      '~': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   plugins: [
