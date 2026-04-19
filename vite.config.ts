@@ -13,10 +13,16 @@ export default defineConfig({
       '~': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  ssr: {
+    external: ['firebase-admin'],
+  },
   plugins: [
     tanstackStart(),
     nitro({
       preset: process.env.VERCEL ? 'vercel' : 'node-server',
+      rollupConfig: {
+        external: ['firebase-admin', 'firebase']
+      }
     }),
     viteReact(),
   ],
