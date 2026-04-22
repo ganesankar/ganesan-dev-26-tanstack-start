@@ -14,15 +14,28 @@ export default defineConfig({
     },
   },
   ssr: {
-    external: ['firebase-admin'],
+    external: [
+      'firebase-admin',
+      '@google-cloud/storage',
+      '@google-cloud/firestore',
+      'google-gax',
+      '@grpc/grpc-js',
+    ],
   },
   plugins: [
     tanstackStart(),
     nitro({
       preset: process.env.VERCEL ? 'vercel' : 'node-server',
       rollupConfig: {
-        external: ['firebase-admin', 'firebase']
-      }
+        external: [
+          'firebase-admin',
+          'firebase',
+          '@google-cloud/storage',
+          '@google-cloud/firestore',
+          'google-gax',
+          '@grpc/grpc-js',
+        ],
+      },
     }),
     viteReact(),
   ],

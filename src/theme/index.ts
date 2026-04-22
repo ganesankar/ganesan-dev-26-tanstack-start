@@ -56,6 +56,13 @@ const sharedComponents: ThemeOptions['components'] = {
       paper: { borderRadius: 12 },
     },
   },
+  MuiContainer: {
+    styleOverrides: {
+      maxWidthLg: {
+        maxWidth: '1536px !important',
+      },
+    },
+  },
 }
 
 export const lightTheme = createTheme({
