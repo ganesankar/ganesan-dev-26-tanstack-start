@@ -13,9 +13,8 @@ export default defineConfig({
       '~': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  ssr: {
+ssr: {
     external: [
-      'firebase-admin',
       '@google-cloud/storage',
       '@google-cloud/firestore',
       'google-gax',
@@ -24,14 +23,11 @@ export default defineConfig({
   },
   plugins: [
     tanstackStart(),
-    nitro({
+nitro({
       preset: process.env.VERCEL ? 'vercel' : 'node-server',
       rollupConfig: {
         external: [
-          'firebase-admin',
-          'firebase',
           '@google-cloud/storage',
-          '@google-cloud/firestore',
           'google-gax',
           '@grpc/grpc-js',
         ],
