@@ -1,4 +1,4 @@
-# Ganesan.dev TanStack Start Migration 🚀
+# Ganesan.dev TanStack Start Migration 🚀  
 
 This repository represents the next-generation migration of the Ganesan.dev personal portfolio and CMS application. It was fully refactored from Next.js/Tailwind CSS into a bleeding-edge Single Page Application leveraging the **TanStack Start** framework.
 
