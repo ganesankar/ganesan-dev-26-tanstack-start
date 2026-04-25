@@ -118,8 +118,10 @@ async function collectTransitiveDeps(rootPkgDirs, visited = new Map()) {
 }
 
 async function shipTo(functionDir) {
-  const targetNm = join(functionDir, 'node_modules')
-  console.log(`[ship-firebase-admin] target: ${relative(projectRoot, targetNm)}`)
+  const targetRoot = functionDir
+  console.log(
+    `[ship-firebase-admin] target: ${relative(projectRoot, join(targetRoot, 'node_modules'))}`,
+  )
 
   const rootDirs = []
   for (const pkg of ROOT_PACKAGES) {
@@ -134,10 +136,26 @@ async function shipTo(functionDir) {
   const allPackages = await collectTransitiveDeps(rootDirs)
   console.log(`[ship-firebase-admin]   tracing ${allPackages.size} packages...`)
 
+  // Preserve the nested node_modules structure so packages with
+  // multiple versions (e.g. node-fetch@2 used by google-gax,
+  // node-fetch@3 used by google-auth-library) each get their correct
+  // version at their original resolution path. Flattening would let
+  // the wrong version win.
   let copied = 0
-  for (const [pkgDir, pkgName] of allPackages) {
-    if (!pkgName) continue
-    const dst = join(targetNm, pkgName)
+  for (const pkgDir of allPackages.keys()) {
+    const rel = relative(projectRoot, pkgDir)
+    if (rel.startsWith('..')) {
+      // package lives outside the project (e.g. pnpm global store);
+      // fall back to flat layout under the function's node_modules.
+      const pkg = await readJSON(join(pkgDir, 'package.json')).catch(() => null)
+      if (!pkg?.name) continue
+      const dst = join(targetRoot, 'node_modules', pkg.name)
+      if (existsSync(dst)) continue
+      await copyDir(pkgDir, dst)
+      copied++
+      continue
+    }
+    const dst = join(targetRoot, rel)
     if (existsSync(dst)) continue
     await copyDir(pkgDir, dst)
     copied++
