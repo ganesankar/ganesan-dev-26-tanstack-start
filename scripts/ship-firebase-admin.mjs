@@ -1,4 +1,3 @@
-@ -0,0 +1,162 @@
 // Ship firebase-admin and its Google Cloud peer deps as runtime
 // node_modules into the Vercel function output.
 //
